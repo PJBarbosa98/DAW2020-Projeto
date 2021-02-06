@@ -6,4 +6,4 @@ $ npm install
 $ npm start
 
 ## Como aceder:
-http://localhost:7710
+http://localhost:7710/
