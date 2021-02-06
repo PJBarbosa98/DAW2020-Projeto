@@ -3,6 +3,7 @@ Projeto da UC Desenvolvimento de Aplicações WEB (Plataforma de Gestão e Dispo
 
 ## Como correr:
 $ npm install
+
 $ npm start
 
 ## Como aceder:
