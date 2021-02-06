@@ -1,0 +1,124 @@
+<nav class="navbar navbar-light bg-light">
+	<div class="container-fluid">
+		<span class="navbar-brand mb-0 h1 mx-auto">
+			<h1><b>Digital Library</b></h1>
+			<a class="btn btn-primary" href="feed"
+			style="display: block; margin: auto;" role="button">View Posts</a>
+		</span>
+	</div>
+</nav>
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm text-center">
+			<h1 class="mt-4">Dashboard</h1>
+			<p class="lead mb-3">Welcome back <%= name %>!</p>
+		</div>
+		<div class="col-sm text-center">
+			<br><br>
+			<a href="/users/logout" class="btn btn-secondary">Logout</a>
+		</div>
+	</div>
+</div>
+
+
+<div class="container mt-5">
+	
+	<div class="text-center m-5">
+		<h3>Your Library:</h3>
+		<pre>[ You have <%= number_of_articles %> record(s). ]</pre>
+	</div>
+	<%- include ('./partials/messages') %>
+
+
+	<div class="container mt-5">
+		<a href="/users/new" class="btn btn-secondary">New Post</a>
+	</div>
+
+	<div class="container mt-5 text-justify text-center">
+
+		<% if ( articles.length != 0 ) { %>
+		
+			<table class="table table-striped">
+	
+				<thead>
+					<tr>
+						<th scope="col">Title</th>
+						<th scope="col">Category</th>
+						<th scope="col">Tags</th>
+						<th scope="col">Deliverables</th>
+						<th scope="col">Edit</th>
+						<th scope="col">Delete</th>
+						<th scope="col">Download</th>
+					</tr>
+				</thead>
+
+				<tbody>
+
+					<% articles.forEach( function (a) { %>
+						
+						<tr>
+							<td>
+								<a href="/users/article/<%= a.title %>"
+								style="color: black; text-decoration: underline;">
+									<%= a.title %>
+								</a>
+							</td>
+							<td> <%= a.category %> </td>
+							
+							<td>
+								<div class="dropdown">
+									<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										Check Tags
+									</button>
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									<% for (var i = 0; i < a.tags.length; i++) { %>
+										<a class="dropdown-item"> <%= a.tags[i] %></a>
+									<% } %>	
+									</div>
+								</div>
+							</td>
+
+							<% if (a.deliverables.length == 0) { %>
+								<td>No deliverables.</td>
+							<% } else { %>
+							<td>
+								<div class="dropdown">
+									<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										Check Deliverables
+									</button>
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									<% for (var i = 0; i < a.deliverables.length; i++) { %>
+										<a class="dropdown-item"> <%= a.deliverables[i] %></a>
+									<% } %>	
+									</div>
+								</div>
+							</td>
+							<% } %>
+
+							<td>
+								<a href="/users/edit/<%= a.title %>" class="btn btn-secondary">Edit</a>
+							</td>
+							<td>
+								<a href="/users/delete/<%= a.title %>" class="btn btn-secondary">Delete</a>
+							</td>
+							<td>
+								<a href="/users/download/<%= a.title %>" class="btn btn-secondary">Download</a>
+							</td>
+						</tr>
+
+					<% }) %>
+
+				</tbody>
+
+			</table>
+
+		<% } %>
+
+	</div>
+
+</div>
+
+
+
+

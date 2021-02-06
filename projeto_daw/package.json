@@ -1,0 +1,40 @@
+{
+  "name": "projeto_daw",
+  "version": "1.0.0",
+  "description": "Projeto da UC Desenvolvimento de Aplicações WEB (Mestrado em Engenharia Informática - U.Minho)",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "devstart": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "DAW2020"
+  },
+  "keywords": [
+    "express",
+    "pug",
+    "nodejs",
+    "mongodb"
+  ],
+  "author": "Paulo Barbosa",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-ejs-layouts": "^2.5.0",
+    "express-session": "^1.17.1",
+    "file-saver": "^2.0.5",
+    "FileSaver": "^0.10.0",
+    "jszip": "^3.5.0",
+    "mongoose": "^5.11.8",
+    "multer": "^1.4.2",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}

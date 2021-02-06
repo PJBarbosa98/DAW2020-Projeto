@@ -1,0 +1,45 @@
+body
+{
+    font-family: 'Roboto', sans-serif;
+    background: #FFFAF0;
+
+}
+
+.center
+{
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    text-align: center;
+}
+
+.cat_header
+{
+    width: 100%;
+    background-color: #00CED1;
+
+}
+
+.cat_text
+{
+    padding-top: 50px;
+    padding-bottom: 50px;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.cat_further_reading
+{
+    padding-top: 50px;
+    padding-bottom: 70px;
+}
+
+.cat_footer
+{
+    width: 100%;
+    background-color: #00CED1;
+    clear: both;
+    position: relative;
+    height: 50px;
+    margin-top: -50px;
+}

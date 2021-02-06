@@ -1,0 +1,124 @@
+<nav class="navbar navbar-light bg-light">
+	<div class="container-fluid">
+		<span class="navbar-brand mb-0 h1 mx-auto">
+			<h1><b>Digital Library</b></h1>
+			<a class="btn btn-primary" href="dashboard"
+			style="display: block; margin: auto;" role="button">Back to Dashboard</a>
+		</span>
+	</div>
+</nav>
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm text-center">
+			<h1 class="mt-4">Dashboard</h1>
+			<p class="lead mb-3">Viewing posts as <%= name %>!</p>
+		</div>
+		<div class="col-sm text-center">
+			<br><br>
+			<a href="/users/logout" class="btn btn-secondary">Logout</a>
+		</div>
+	</div>
+</div>
+
+<div class="container mt-5">
+	<div class="text-center m-5">
+		<h3>Library:</h3>
+		<pre>[ Displaying <%= posts.length %> record(s).]</pre>
+	</div>
+
+	<div class="container mt-5 text-justify text-center">
+
+		<% if ( posts.length != 0 ) { %>
+
+			<table class="table table-striped">
+				
+				<thead>
+					<tr>
+						<th scope="col">Author</th>
+						<th scope="col">Title</th>
+						<th scope="col">Category</th>
+						<th scope="col">Tags</th>
+						<th scope="col">Deliverables</th>
+						<th scope="col">Download</th>
+					</tr>
+				</thead>
+
+				<tbody>
+
+					<% posts.forEach( function (p) { %>
+
+						<tr>
+							<td>
+								<a href="/users/<%= p.author %>" class="btn btn-secondary">
+									<%= p.author %>
+								</a>
+							</td>
+							<td>
+								<a href="/users/article/<%= p.title %>"
+								style="color: black; text-decoration: underline;">
+									<%= p.title %>
+								</a>
+							</td>
+							<td> <%= p.category %> </td>
+							
+							<td>
+								<div class="dropdown">
+									
+									<button class="btn btn-secondary dropdown-toggle" type"button"
+									id="dropdownMenuButton" data-toggle="dropdown" aria-hashpopup="true"
+									aria-expanded="false">
+										Check Tags
+									</button>
+									
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+										<% for (var i = 0; i < p.tags.length; ++i) { %>
+											<a class="dropdown-item"> <%= p.tags[i] %> </a>
+										<% } %>
+									</div>
+
+								</div>
+							</td>
+
+							<td>
+								<% if (p.deliverables.length == 0) { %>
+									<td>No deliverables.</td>
+								<% } else { %>
+
+									<div class="dropdown">
+
+										<button class="btn btn-secondary dropdown-toggle" type"button"
+										id="dropdownMenuButton" data-toggle="dropdown" aria-hashpopup="true"
+										aria-expanded="false">
+											Check Deliverables
+										</button>
+
+										<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+											<% for (var i = 0; i < p.deliverables.length; ++i) { %>
+												<a class="dropdown-item"> <%= p.deliverables[i] %> </a>
+											<% } %>
+										</div>
+
+									</div>
+
+								<% } %>
+
+							</td>
+
+							<td>
+								<a href="/users/download/<%= p.title %>" class="btn btn-secondary">Download</a>
+							</td>
+
+						</tr>
+
+					<% }) %>
+
+				</tbody>
+
+			</table>
+
+		<% } %>
+
+	</div>
+
+</div>

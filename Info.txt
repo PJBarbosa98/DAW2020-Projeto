@@ -1,0 +1,23 @@
+Database:
+	- eLibrary
+
+ADMIN Credentials:
+	id: admin@admin
+	pw: sysadmin
+
+User Credentials:
+	id: lovelyrita@gmail.com
+	pw: thebeatles
+
+	id: jcr@custommail.com
+	pw: jcr123
+
+	id: random@mail.com
+	pw: 123123
+
+	id: prof_lcc@mail.com
+	pw: intimidante
+
+Collections:
+	- users 	(holds user information)
+	- articles 	(holds the resources uploaded by users)

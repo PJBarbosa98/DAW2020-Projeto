@@ -1,0 +1,40 @@
+<nav class="navbar navbar-light bg-light">
+	<div class="container-fluid">
+		<span class="navbar-brand mb-0 h1 mx-auto">
+			<h1><b>Digital Library</b></h1>
+			<a class="btn btn-primary" href="feed"
+			style="display: block; margin: auto;" role="button">View Posts</a>
+		</span>
+	</div>
+</nav>
+
+<div class="row mt-5">
+	<div class="col-md-6 m-auto">
+		<div class="card card-body text-center">
+			<h1>
+				<i class="fas fa-sign-in-alt"></i>
+			</h1>
+			<p>
+				In order to have access to the repository you must either log in
+				or create an account!
+			</p>
+			<a href="/users/login" class="btn btn-secondary btn-block">
+				Login
+			</a>
+			<a href="/users/register" class="btn btn-primary btn-block mb-2">
+				Register
+			</a>
+		</div>
+	</div>
+</div>
+
+<p class="text-center" style="margin-top: 10%">
+	Digital Library is a platform that manages and holds educational resources.
+</p>
+<p class="text-center">
+	You can upload your own work, or view others' projects!
+</p>
+
+<div class="alert alert-primary mt-5" role="alert">
+	Our system currently has <%= number_of_articles %> records! %>
+</div>

@@ -1,0 +1,215 @@
+%% File: public_welfare.mcrl2
+%% Date: 30-05-2019
+
+%% Data type for services (either transport or meal)
+sort Service = struct transport | meal;
+
+%% Data type for distance (in order to calculate the service's cost)
+sort Distance = Int;
+
+%%%%% ACTIONS %%%%%
+
+%% Actions available for Citizen
+act post_request    	: Int;
+	get_info			: Int;
+	info_provide    	: Service # Distance # Int;
+	get_served 			: Service # Int;					%% Service # who's being served
+	receive_ack     	: Int;
+	receive_ref     	: Int;
+	pay_prv_fees    	: Int # Int;						%% Price of fee # who's paying
+
+%% Actions available for Agency
+act receive_request		: Int;
+	info_request		: Int;
+	info_receive		: Service # Distance # Int;
+	acc_request			: Int;
+	ref_request			: Int;
+	sync_cc				: Service # Distance # Int;
+	pay_pub_fees		: Int;
+	receive_complete	;
+
+%% Actions available for Control Cooperative
+act receive_service 	: Service # Distance # Int;
+	transport_coop		: Distance # Int;
+	meal_coop 			: Distance # Int;
+
+%% Actions available for Transportation and Meal Cooperatives
+act start_trans			: Distance # Int;
+	start_meal			: Distance # Int;
+	provide_serv		: Service # Int;
+	warn_bank			: Service # Distance # Int;			%% Number of citizen to receive fees
+	receive_fees		: Int;
+
+%% Actions available for Bank
+act receive_warn		: Service # Distance # Int;
+	pub_fees			: Int;
+	prv_fees			: Int # Int;
+	pay_cooperative		: Int;
+	complete 			;
+
+%%%%% PROCESSES %%%%% 
+
+%% Citizen Process
+proc Citizen(id: Int, d: Distance) =
+	post_request(id)
+	. get_info(id)
+	. sum n : Service
+	. info_provide(n, d, id)
+	.
+	(
+			receive_ref(id)
+		+
+			receive_ack(id)
+			. get_served(n, id)
+			. sum price : Int
+			. pay_prv_fees(price, id)
+	)
+	. Citizen(id, d);
+
+%% Agency Process
+proc Agency =
+	sum id : Int
+		. receive_request(id)
+		. info_request(id)
+		. sum s : Service
+			. sum d : Distance
+				. info_receive(s, d, id)
+				. (s == meal || s == transport) ->
+					acc_request(id)
+					. sync_cc(s, d, id)
+					. sum price : Int
+						. pay_pub_fees(price)
+						. receive_complete
+						. Agency
+				<>
+					ref_request(id)
+					. Agency;
+
+%% Control Cooperative Process
+proc ControlCooperative =
+	sum s : Service
+		. sum d : Distance
+			. sum id : Int
+				. receive_service(s, d, id)
+				. (s == meal) ->
+					meal_coop(d, id)
+					. ControlCooperative
+				<>
+					transport_coop(d, id)
+					. ControlCooperative;
+
+%% Meal Cooperative Process
+proc MealCooperative =
+	sum d : Distance
+		. sum id : Int
+			. start_meal(d, id)
+			. provide_serv(meal, id)
+			. warn_bank(meal, d, id)
+			. sum price : Int
+				. receive_fees(price)
+				. MealCooperative;
+
+%% Transport Cooperative Process
+proc TransportCooperative =
+	sum d : Distance
+		. sum id : Int
+			. start_trans(d, id)
+			. provide_serv(transport, id)
+			. warn_bank(transport, d, id)
+			. sum price : Int
+				. receive_fees(price)
+				. TransportCooperative;
+
+%% Bank Process
+proc Bank =
+	sum s : Service
+		. sum d : Distance
+			. sum id : Int
+				. receive_warn(s, d, id)
+				. (s == meal) ->
+					pub_fees(d * 2)
+					. prv_fees(d * 2, id)
+					. pay_cooperative(d * 4)
+					. complete
+					. Bank
+				<>
+					pub_fees(d * 4)
+					. prv_fees(d * 4, id)
+					. pay_cooperative(d * 8)
+					. complete
+					. Bank;
+
+%%%%%
+
+%% Parallel Actions
+act request 	: Int;
+	_info		: Int;
+	info_ 		: Service # Distance # Int;
+	acc 		: Int;
+	ref 		: Int;
+	cc 			: Service # Distance # Int;
+	transptSV 	: Distance # Int;
+	mealSV		: Distance # Int;
+	serviceAC	: Service # Int;
+	warn 		: Service # Distance # Int;
+	coopfees	: Int;
+	public 		: Int;
+	private		: Int # Int;
+	done		;
+
+init
+	hide
+	(
+		{
+			_info,
+			acc,
+			ref,
+			cc,
+			warn,
+			done
+		},
+		allow
+		(
+			{
+				request,
+				_info,
+				info_,
+				acc,
+				ref,
+				cc,
+				transptSV,
+				mealSV,
+				serviceAC,
+				warn,
+				coopfees,
+				public,
+				private,
+				done
+			},
+			comm
+			(
+				{
+					post_request 		| receive_request 	-> request,
+					get_info 			| info_request 		-> _info,
+					info_provide		| info_receive		-> info_,
+					receive_ack			| acc_request		-> acc,
+					receive_ref 		| ref_request		-> ref,
+					sync_cc				| receive_service	-> cc,
+					transport_coop		| start_trans		-> transptSV,
+					meal_coop			| start_meal		-> mealSV,
+					provide_serv		| get_served		-> serviceAC,
+					warn_bank			| receive_warn		-> warn,
+					receive_fees 		| pay_cooperative	-> coopfees,
+					pay_pub_fees		| pub_fees 			-> public,
+					pay_prv_fees		| prv_fees 			-> private,
+					receive_complete 	| complete 			-> done
+				},
+
+				%% Process Initialisation
+				Citizen(1,23) || Citizen(4,73) 
+				|| Citizen(2,17) || Citizen(3,5) || Citizen(5,43) 
+				|| Bank || ControlCooperative || Agency || MealCooperative
+				|| TransportCooperative
+			)
+		)
+	);

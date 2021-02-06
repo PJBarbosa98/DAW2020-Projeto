@@ -1,0 +1,114 @@
+<nav class="navbar navbar-light bg-light">
+	<div class="container-fluid">
+		<span class="navbar-brand mb-0 h1 mx-auto">
+			<h1><b>Digital Library</b></h1>
+		</span>
+	</div>
+</nav>
+
+<div class="container mt-5">
+	<div class="text-center m-5">
+		<h3>Page for article <%= article.title %>.</h3>
+	</div>
+	<div class="container mt-5 text-justify text-center">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">Title</th>
+					<th scope="col">Category</th>
+					<th scope="col">Author</th>
+					<th scope="col">Date</th>
+					<th scope="col">Tags</th>
+					<th scope="col">Deliverables</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><%= article.title %></td>
+					<td><%= article.category %></td>
+					<td><%= article.author %></td>
+					<td>
+						<% var pretty_date = String(article.date).substr(0, 16); %>
+						<%= pretty_date %>
+					</td>
+					<td>
+						<div class="dropdown">
+							<button class="btn btn-secondary dropdown-toggle" type"button"
+							id="dropdownMenuButton" data-toggle="dropdown" aria-hashpopup="true"
+							aria-expanded="false">
+								Check Tags
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<% for (var i = 0; i < article.tags.length; ++i) { %>
+									<a class="dropdown-item">
+										<%= article.tags[i] %>
+									</a>
+								<% } %>
+							</div>
+						</div>
+					</td>
+					<td>
+						<div class="dropdown">
+							<button class="btn btn-secondary dropdown-toggle" type"button"
+							id="dropdownMenuButton" data-toggle="dropdown" aria-hashpopup="true"
+							aria-expanded="false">
+								Check Deliverables
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<% for (var i = 0; i < article.deliverables.length; ++i) { %>
+									<a class="dropdown-item">
+										<%= article.deliverables[i] %>
+									</a>
+								<% } %>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</body>
+		</table>
+	</div>
+</div>
+
+<div class="container mt-5">
+	<h3 class="text-center">Share your thoughts on <%= article.title %>!</h3>
+
+	<form action="/users/article/<%= article.title %>" method="POST">
+		<div class="form-group">
+		<label for="body">Comment</label>
+		<input
+			type="text"
+			id="body"
+			name="body"
+			class="form-control"
+			placeholder="Comment goes here..."
+		/>
+		<button type="submit" class="btn btn-secondary btn-block mt-2">
+			Add Comment
+		</button>
+	</form>
+</div>
+
+<div class="container mt-5">
+	<h4 class="text-center">
+		Comments:
+	</h4>
+
+	<% if (article.comments.length == 0) { %>
+		<p class="text-center">No comments yet!</p>
+	<% } else { %>
+		<div class="card">			
+			<% for (var i = 0; i < article.comments.length; ++i) { %>
+				<div class="card-body">
+					<b>Comment By: <%= article.comments[i].byWho %></b>
+					<br>
+					<p><%= article.comments[i].body %></p>
+					<hr>
+				</div>
+			<% } %>
+	<% } %>
+	
+</div>
+
+<a href="/dashboard" class="btn btn-secondary btn-block mb-2 mt-5">
+	Back to Dashboard
+</a>
